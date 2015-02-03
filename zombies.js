@@ -1,4 +1,4 @@
-/**
+/** https://github.com/ktanigawa/js-zombies
  * Class => Item(name)
  * -----------------------------
  * Creates an item.
@@ -207,7 +207,7 @@ Player.prototype.discardItem = function( item ){
   // same as if (pack.indexOf(item) !== -1)
   if (pack.indexOf(item) >= 0) {
     pack.splice(pack.indexOf(item),1);
-    console.log(this.name + item.name + "was discarded.");
+    console.log(this.name + " " + item.name + " " + "was discarded.");
     return true;
   }
 };
@@ -242,6 +242,7 @@ Player.prototype.equip = function(itemToEquip){
       }else {
         pack.splice(pack.indexOf(itemToEquip),1);
         pack.push(this.equipped);
+        // weapon that is equipped is stored in the itemToEquip
         this.equipped = itemToEquip;
         return true;
       }
@@ -298,14 +299,19 @@ Player.prototype.eat = function(itemToEat){
 
 Player.prototype.useItem = function (item){
   var pack = this.getPack();
+  // if its not in the pack use -1 
   if (pack.indexOf(item) === -1) {
     return false;
   } else {
+    // if the item is a weapon
     if (item instanceof Weapon) {
+      // Player.equip to use the item in this parameter for itemToEquip function
       this.equip(item);
       return true; 
-    }
+    } 
+    // if the item is food
     if (item instanceof Food) {
+      // Player.eat to use the item in this parameter for itemToEat function     
       this.eat(item);
       return true;
     }
@@ -325,7 +331,18 @@ Player.prototype.useItem = function (item){
  * @name equippedWith
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
-
+Player.prototype.equippedWith = function (){
+  // if player is equipped
+  if (this.equipped === false) {
+  // print the "players name", + ('weapon.name', weapon.name)
+    console.log(this.name + this.equipped.name + "is not equipped");
+    return false;
+  } else {
+    // this.name is Player's name + weapon name + string
+    console.log(this.name + this.equipped.name + "is equipped");
+    return this.equipped.name;
+  }
+};
 
 /**
  * Class => Zombie(health, strength, speed)
@@ -342,7 +359,18 @@ Player.prototype.useItem = function (item){
  * @property {number} speed
  * @property {boolean} isAlive      Default value should be `true`.
  */
-
+function Zombie (health, strength, speed) {
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+  var maxHealth = health;
+  this.getMaxHealth = function(){
+    if( health !== null || pack !== undefined){
+    return maxHealth;
+    }
+  };
+}
 
 /**
  * Class => FastZombie(health, strength, speed)
@@ -364,7 +392,14 @@ Player.prototype.useItem = function (item){
  * FastZombie Extends Zombie Class
  * -----------------------------
  */
-
+function FastZombie (health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
+FastZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: Zombie
+  }
+});
 
 
 /**
@@ -388,7 +423,14 @@ Player.prototype.useItem = function (item){
  * -----------------------------
  */
 
-
+function StrongZombie (health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
+StrongZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: Zombie
+  }
+});
 
 /**
  * Class => RangedZombie(health, strength, speed)
@@ -410,7 +452,14 @@ Player.prototype.useItem = function (item){
  * StrongZombie Extends Zombie Class
  * -----------------------------
  */
-
+function RangedZombie (health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
+RangedZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: Zombie
+  }
+});
 
 
 /**
@@ -433,7 +482,14 @@ Player.prototype.useItem = function (item){
  * ExplodingZombie Extends Zombie Class
  * -----------------------------
  */
-
+function ExplodingZombie (health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
+ExplodingZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: Zombie
+  }
+});
 
 
 
